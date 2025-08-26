@@ -1,6 +1,6 @@
 import psycopg2
 from psycopg2.extras import DictCursor
-from database import get_connection
+from .database import get_connection
 import uuid
 
 

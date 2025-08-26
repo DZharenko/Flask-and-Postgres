@@ -1,16 +1,20 @@
 from flask import Flask, render_template, url_for, abort, request, redirect, flash, get_flashed_messages
 import json
-from models import SchoolRepository
-from database import init_db
+from .models import SchoolRepository
 import os
 
-
-# Инициализируем базу данных при запуске
-init_db()
 
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'your-secret-key-dev')  # Безопаснее
+
+
+# Инициализируем БД только если это не production
+if not os.environ.get('DATABASE_URL'):
+    from database import init_db
+    init_db()
+
+
 
 school_repo = SchoolRepository()
 
