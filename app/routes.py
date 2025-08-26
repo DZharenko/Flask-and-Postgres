@@ -11,7 +11,7 @@ app.secret_key = os.environ.get('SECRET_KEY', 'your-secret-key-dev')  # Безо
 
 # Инициализируем БД только если это не production
 if not os.environ.get('DATABASE_URL'):
-    from database import init_db
+    from    .database import init_db
     init_db()
 
 
