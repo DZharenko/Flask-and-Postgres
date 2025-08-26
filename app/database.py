@@ -18,7 +18,8 @@ def get_connection():
             database=result.path[1:],  # Убираем первый слэш
             user=result.username,
             password=result.password,
-            port=result.port
+            port=result.port,
+            sslmode='require'
         )
     else:
         # Локальная разработка
@@ -30,7 +31,7 @@ def get_connection():
             port=os.getenv('DB_PORT', '5432')
         )
     
-    
+
 def init_db():
     """Инициализирует базу данных и таблицы"""
     conn = get_connection()

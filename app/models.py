@@ -12,10 +12,14 @@ class SchoolRepository():
 
 
     def find_all(self):
-        with self.conn.cursor(cursor_factory = DictCursor) as cursor:
-            cursor.execute("SELECT * FROM schools")
-            return [dict(row) for row in cursor]
-
+        try:
+            with self.conn.cursor(cursor_factory = DictCursor) as cursor:
+                cursor.execute("SELECT * FROM schools")
+                return [dict(row) for row in cursor]
+        except Exception as e:
+            self.conn.rollback()  # ← КРИТИЧЕСКИ ВАЖНО!
+            print(f"Error in find_all: {e}")
+            return []
 
     def find_by_id(self, school_id):
         with self.conn.cursor(cursor_factory = DictCursor) as cursor:

@@ -10,9 +10,9 @@ app.secret_key = os.environ.get('SECRET_KEY', 'your-secret-key-dev')  # Безо
 
 
 # Инициализируем БД только если это не production
-if not os.environ.get('DATABASE_URL'):
-    from    .database import init_db
-    init_db()
+# if not os.environ.get('DATABASE_URL'):
+#     from .database import init_db
+#     init_db()
 
 
 
@@ -113,6 +113,18 @@ def schools_delete(id):
     school_repo.delete(id)
     flash("Школа удалена", "success")
     return redirect(url_for('schools_index'))
+
+
+@app.route('/init-db')
+def init_database():
+    """Ручная инициализация БД для продакшена"""
+    try:
+        from .database import init_db
+        init_db()
+        return "Database initialized successfully!", 200
+    except Exception as e:
+        return f"Database initialization failed: {e}", 500
+
 
 
 if __name__ == "__main__":
