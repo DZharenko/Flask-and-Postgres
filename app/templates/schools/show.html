@@ -1,0 +1,246 @@
+<!-- <div>
+    {{school.name}} : {{school.type}}
+</div>
+
+<div>
+
+    <a href="/schools/{{school.id}}/edit">Обновить данные школы</a>
+
+
+</div>
+
+<form action="{{ url_for('schools_delete', id=school.id) }}" method="post"
+    onsubmit="return confirm('Вы уверены, что хотите удалить школу? Данные нельзя будет восстановить!');">
+    <input type="submit" value="Удалить школу">
+</form> -->
+
+
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Информация о школе</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .logo {
+            margin-bottom: 30px;
+        }
+        
+        .logo i {
+            font-size: 64px;
+            color: #6a11cb;
+            margin-bottom: 15px;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 32px;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            font-size: 18px;
+        }
+        
+        .school-info {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            text-align: left;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .info-row {
+            display: flex;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eaeaea;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: #2c3e50;
+            min-width: 120px;
+        }
+        
+        .info-value {
+            color: #7f8c8d;
+            flex-grow: 1;
+        }
+        
+        .actions {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 25px;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .btn i {
+            margin-right: 10px;
+            font-size: 20px;
+        }
+        
+        .btn-edit {
+            background: linear-gradient(45deg, #00b09b, #96c93d);
+            box-shadow: 0 5px 15px rgba(150, 201, 61, 0.3);
+        }
+        
+        .btn-edit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(150, 201, 61, 0.4);
+        }
+        
+        .btn-delete {
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            box-shadow: 0 5px 15px rgba(255, 75, 43, 0.3);
+        }
+        
+        .btn-delete:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 75, 43, 0.4);
+        }
+        
+        .btn-back {
+            background: linear-gradient(45deg, #7f8c8d, #95a5a6);
+            box-shadow: 0 5px 15px rgba(149, 165, 166, 0.3);
+            margin-top: 10px;
+        }
+        
+        .btn-back:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(149, 165, 166, 0.4);
+        }
+        
+        .footer {
+            margin-top: 30px;
+            color: #95a5a6;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 28px;
+            }
+            
+            .btn {
+                padding: 14px 20px;
+            }
+            
+            .info-row {
+                flex-direction: column;
+            }
+            
+            .info-label {
+                margin-bottom: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <i class="fas fa-school"></i>
+            <h1>Информация о школе</h1>
+            <div class="subtitle">Просмотр и управление данными учебного заведения</div>
+        </div>
+        
+        <div class="school-info">
+            <div class="info-row">
+                <div class="info-label">Название:</div>
+                <div class="info-value">{{school.name}}</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Тип:</div>
+                <div class="info-value">{{school.type}}</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">ID:</div>
+                <div class="info-value">{{school.id}}</div>
+            </div>
+        </div>
+        
+        <div class="actions">
+            <a href="/schools/{{school.id}}/edit" class="btn btn-edit">
+                <i class="fas fa-edit"></i>
+                Обновить данные школы
+            </a>
+            
+            <form action="{{ url_for('schools_delete', id=school.id) }}" method="post"
+                onsubmit="return confirm('Вы уверены, что хотите удалить школу? Данные нельзя будет восстановить!');">
+                <button type="submit" class="btn btn-delete">
+                    <i class="fas fa-trash-alt"></i>
+                    Удалить школу
+                </button>
+            </form>
+            
+            <a href="/schools" class="btn btn-back">
+                <i class="fas fa-arrow-left"></i>
+                Вернуться к списку школ
+            </a>
+        </div>
+        
+        <div class="footer">
+            &copy; 2025 Образовательный портал. Все права защищены.
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,368 @@
+<!-- {% with messages = get_flashed_messages(with_categories = true) %}
+{% if messages %}
+    <div class="flash-messages">
+        {% for category, message in messages %}
+            <div class="flash {{category}}">{{message}}</div>
+        {% endfor %}
+    </div>
+{%endif%}
+{% endwith %}
+
+
+
+<table>
+{% for school in schools%}
+
+<tr>
+    <td>
+        {{school.name}}
+    </td>
+    <td>
+        <a href="{{url_for('schools_show', id=school.id)}}">{{school.name}}</a>
+    </td>
+</tr>
+{% endfor %}
+
+
+</table>
+ -->
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список школ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            width: 100%;
+            max-width: 800px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .logo {
+            margin-bottom: 30px;
+        }
+        
+        .logo i {
+            font-size: 64px;
+            color: #6a11cb;
+            margin-bottom: 15px;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 32px;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            font-size: 18px;
+        }
+        
+        .flash-messages {
+            margin-bottom: 25px;
+        }
+        
+        .flash {
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .flash.success {
+            background: rgba(46, 204, 113, 0.15);
+            color: #27ae60;
+            border: 1px solid #2ecc71;
+        }
+        
+        .flash.error {
+            background: rgba(231, 76, 60, 0.15);
+            color: #c0392b;
+            border: 1px solid #e74c3c;
+        }
+        
+        .flash.info {
+            background: rgba(52, 152, 219, 0.15);
+            color: #2980b9;
+            border: 1px solid #3498db;
+        }
+        
+        .flash.warning {
+            background: rgba(241, 196, 15, 0.15);
+            color: #d35400;
+            border: 1px solid #f1c40f;
+        }
+        
+        .flash i {
+            margin-right: 10px;
+            font-size: 20px;
+        }
+        
+        .schools-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-bottom: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .schools-table th {
+            background: linear-gradient(45deg, #6a11cb, #2575fc);
+            color: white;
+            padding: 18px 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .schools-table th:first-child {
+            padding-left: 25px;
+        }
+        
+        .schools-table th:last-child {
+            padding-right: 25px;
+        }
+        
+        .schools-table tr {
+            transition: background 0.3s ease;
+        }
+        
+        .schools-table tr:nth-child(even) {
+            background: rgba(106, 17, 203, 0.03);
+        }
+        
+        .schools-table tr:hover {
+            background: rgba(106, 17, 203, 0.08);
+        }
+        
+        .schools-table td {
+            padding: 16px 15px;
+            color: #2c3e50;
+            border-bottom: 1px solid #eaeaea;
+        }
+        
+        .schools-table td:first-child {
+            padding-left: 25px;
+            font-weight: 500;
+        }
+        
+        .schools-table td:last-child {
+            padding-right: 25px;
+        }
+        
+        .school-link {
+            color: #6a11cb;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        .school-link i {
+            margin-right: 8px;
+            font-size: 14px;
+        }
+        
+        .school-link:hover {
+            color: #2575fc;
+            transform: translateX(5px);
+        }
+        
+        .actions {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 25px;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .btn i {
+            margin-right: 10px;
+            font-size: 20px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, #00b09b, #96c93d);
+            box-shadow: 0 5px 15px rgba(150, 201, 61, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(150, 201, 61, 0.4);
+        }
+        
+        .empty-state {
+            padding: 40px 20px;
+            color: #7f8c8d;
+            text-align: center;
+            background: #f8f9fa;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: #bdc3c7;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            color: #95a5a6;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 28px;
+            }
+            
+            .schools-table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .schools-table th, 
+            .schools-table td {
+                white-space: nowrap;
+            }
+            
+            .btn {
+                padding: 14px 20px;
+                width: 100%;
+            }
+            
+            .actions {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <i class="fas fa-school"></i>
+            <h1>Список школ</h1>
+            <div class="subtitle">Все учебные заведения в системе</div>
+        </div>
+        
+        <!-- Flash сообщения -->
+        {% with messages = get_flashed_messages(with_categories = true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="flash {{category}}">
+                        <i class="fas 
+                            {% if category == 'success' %}fa-check-circle
+                            {% elif category == 'error' %}fa-exclamation-circle
+                            {% elif category == 'warning' %}fa-exclamation-triangle
+                            {% else %}fa-info-circle{% endif %}">
+                        </i>
+                        {{message}}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% endwith %}
+        
+        {% if schools %}
+            <table class="schools-table">
+                <thead>
+                    <tr>
+                        <th>Название школы</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for school in schools %}
+                    <tr>
+                        <td>{{school.name}}</td>
+                        <td>
+                            <a href="{{url_for('schools_show', id=school.id)}}" class="school-link">
+                                <i class="fas fa-eye"></i>
+                                Просмотреть
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="empty-state">
+                <i class="fas fa-school-circle-exclamation"></i>
+                <h3>Школы не найдены</h3>
+                <p>В системе пока нет добавленных школ. Создайте первую школу!</p>
+            </div>
+        {% endif %}
+        
+        <div class="actions">
+            <a href="/schools/new" class="btn btn-primary">
+                <i class="fas fa-plus"></i>
+                Добавить школу
+            </a>
+        </div>
+        
+        <div class="footer">
+            &copy; 2025 Образовательный портал. Все права защищены.
+        </div>
+    </div>
+</body>
+</html>
